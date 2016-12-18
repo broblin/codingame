@@ -1,8 +1,4 @@
 import java.util.*;
-import java.io.*;
-import java.math.*;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 /**
  * Created by benoit on 18/12/16.
@@ -26,6 +22,24 @@ public class ChevauxDeCourse {
         System.out.println(minimum);
     }
 
+    public void solution2(int[] numbers){
+        //TODO : vérifier la longueur du tableau
+        //Arrays.stream(numbers).sorted().collect(int i -> new MinimumDifference(i),);
+        List<MinimumDifference> liste = new ArrayList<>();
+        Arrays.stream(numbers).sorted().forEach(num -> liste.add(new MinimumDifference(num)));
+
+        MinimumDifference result = liste.stream().reduce(new MinimumDifference(0,Integer.MAX_VALUE),(dif1,dif2) -> {
+            int difference = Math.abs(dif1.horseLevel-dif2.horseLevel);
+            if(difference < dif1.previousMinimumDifference){
+                dif2.previousMinimumDifference = difference;
+            }else{
+                dif2.previousMinimumDifference = dif1.previousMinimumDifference;
+            }
+            return dif2;
+        });
+        System.out.println(result.previousMinimumDifference);
+    }
+
     public static void main(String[] args){
         int[] numbers = new int[5];
         numbers[0] = 3;
@@ -34,5 +48,23 @@ public class ChevauxDeCourse {
         numbers[3] = 2;
         numbers[4] = 9;
         solution1(numbers);
+        (new ChevauxDeCourse()).solution2(numbers);
+    }
+
+    //sert d'accumulateur : pzs sûr que ce soit plus simple à priori mais on peut plus étendre le code.
+    class MinimumDifference{
+
+        public MinimumDifference(int horseLevel){
+            this.horseLevel = horseLevel;
+        }
+
+        public MinimumDifference(int horseLevel,int previousMinimumDifference){
+            this.horseLevel = horseLevel;
+            this.previousMinimumDifference = previousMinimumDifference;
+        }
+
+        public int horseLevel;
+        public int previousMinimumDifference;
+
     }
 }
