@@ -10,16 +10,15 @@ public class Temperature {
 
     public static void main(String[] args){
         String strTemperatures = "4 -1 1 2 -3";
-        //TODO : vérifier la nullité
+        if(strTemperatures == null){
+            System.out.println("tableau null !");
+        }
         String[] tabStrTemperatures = strTemperatures.split(" ");
 
         //vérifier que tout est numérique
         List<String> strTemperaturesList = Arrays.asList(tabStrTemperatures);
         if(strTemperaturesList.stream().allMatch(t -> t.matches("[0-9\\-]+"))){
-            int[] temperatures = Stream.of(tabStrTemperatures).mapToInt(Integer::parseInt).toArray();
-            //int[] temperatures = new int[]{4,-1,1,2,-3};
-            List<Integer> temperaturesList = Arrays.stream(temperatures).boxed().collect(Collectors.toList());
-            System.out.println(temperaturesList.stream().min((s1, s2) -> Math.abs(s1) == Math.abs(s2) ? -Integer.compare(s1, s2) : Integer.compare(Math.abs(s1), Math.abs(s2))).get());
+            System.out.println(Stream.of(tabStrTemperatures).mapToInt(Integer::parseInt).boxed().min((s1, s2) -> Math.abs(s1) == Math.abs(s2) ? -Integer.compare(s1, s2) : Integer.compare(Math.abs(s1), Math.abs(s2))).get());
         }else {
             System.out.println("pas un numérique !");
         }
